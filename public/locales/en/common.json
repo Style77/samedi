@@ -1,0 +1,29 @@
+{
+  "index": {
+    "hero": {
+      "subtitle": "Your key to organization in ",
+      "business": "Business",
+      "button": "Get Started"
+    },
+    "about": {
+      "title": "About",
+      "subtitle": "What is Samedi?\nSamedi is a tool that helps you organize your business.\nIt offers:",
+      "signUp": "Sign up now!",
+      "readMore": "Read more",
+      "features": {
+        "first": {
+          "label": "Simple and intuitive interface",
+          "description": "lorem ipsum dolor sit amet"
+        },
+        "second": {
+          "label": "Real-time collaboration with your team",
+          "description": "lorem ipsum dolor sit amet"
+        },
+        "third": {
+          "label": "Very fast and secure",
+          "description": "lorem ipsum dolor sit amet"
+        }
+      }
+    }
+  }
+}
