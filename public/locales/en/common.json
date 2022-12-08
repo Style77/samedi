@@ -3,11 +3,12 @@
     "hero": {
       "subtitle": "Your key to organization in ",
       "business": "Business",
-      "button": "Get Started"
+      "button": "Get Started",
+      "dashboard_button": "Go to Dashboard"
     },
     "about": {
       "title": "About",
-      "subtitle": "What is Samedi?\nSamedi is a tool that helps you organize your business.\nIt offers:",
+      "subtitle": "Samedi is a tool that helps you organize your business. Samedi offers..",
       "signUp": "Sign up now!",
       "readMore": "Read more",
       "features": {
@@ -24,6 +25,57 @@
           "description": "lorem ipsum dolor sit amet"
         }
       }
+    },
+    "pricing": {
+      "title": "Designed for business teams like yours",
+      "subtitle": "Here at Samedi we focus on making your business growth as effective as possible.",
+      "per": "month",
+      "plans": {
+        "starter": {
+          "label": "Starter",
+          "price": 0,
+          "description": "Ideal choice for everyone starting with their bussiness",
+          "features": {
+            "first": "Individual configuration",
+            "second": "lorem ipsum dolor sit amet",
+            "third": "lorem ipsum dolor sit amet",
+            "fourth": "lorem ipsum dolor sit amet",
+            "fifth": "lorem ipsum dolor sit amet"
+          }
+        },
+        "professional": {
+          "label": "Professional",
+          "price": 19,
+          "description": "lorem ipsum dolor sit amet",
+          "features": {
+            "first": "Individual configuration",
+            "second": "lorem ipsum dolor sit amet",
+            "third": "lorem ipsum dolor sit amet",
+            "fourth": "lorem ipsum dolor sit amet",
+            "fifth": "lorem ipsum dolor sit amet"
+          }
+        },
+        "enterprise": {
+          "label": "Enterprise",
+          "price": 29,
+          "description": "lorem ipsum dolor sit amet",
+          "features": {
+            "first": "Individual configuration",
+            "second": "lorem ipsum dolor sit amet",
+            "third": "lorem ipsum dolor sit amet",
+            "fourth": "lorem ipsum dolor sit amet",
+            "fifth": "lorem ipsum dolor sit amet"
+          }
+        }
+      }
     }
+  },
+  "navbar": {
+    "dashboard": "Dashboard",
+    "about": "About",
+    "pricing": "Pricing",
+    "features": "Features",
+    "team": "Team",
+    "home": "Home"
   }
 }
