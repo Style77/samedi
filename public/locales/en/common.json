@@ -77,5 +77,46 @@
     "features": "Features",
     "team": "Team",
     "home": "Home"
+  },
+  "register": {
+    "email": "Email",
+    "password": "Password",
+    "passwordConfirm": "Confirm password",
+    "name": "Name and surname",
+    "submit": "Sign up",
+    "login": "Already have an account?",
+    "loginLink": "Login",
+    "success": "You have successfully registered! You can now log in to your account.",
+    "placeholders": {
+      "email": "Enter your email",
+      "password": "Enter your password",
+      "passwordConfirm": "Confirm your password",
+      "name": "Enter your name and surname"
+    }
+  },
+  "login": {
+    "signInWith": "Sign in with",
+    "email": "Email",
+    "password": "Password",
+    "submit": "Login",
+    "rememberMe": "Remember me",
+    "ForgotPassword": "Forgot password?",
+
+    "register": "Don't have an account?",
+    "registerLink": "Register",
+    "placeholders": {
+      "email": "Enter your email",
+      "password": "Enter your password"
+    }
+  },
+  "common": {
+    "or": "Or"
+  },
+  "popups": {
+    "alreadyLoggedIn": {
+      "text": "You are already logged in. If you want to log in with another account, please log out first.",
+      "approve": "Ok, logout me",
+      "cancel": "Cancel, and redirect to dashboard"
+    }
   }
 }

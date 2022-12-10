@@ -6,6 +6,10 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   i18n: i18n,
+  env: {
+    APPWRITE_APP_ENDPOINT: process.env.APPWRITE_APP_ENDPOINT,
+    APPWRITE_PROJECT_ID: process.env.APPWRITE_PROJECT_ID,
+  }
 }
 
 module.exports = nextConfig
