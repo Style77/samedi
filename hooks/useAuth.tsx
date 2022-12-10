@@ -28,7 +28,11 @@ export const useAuth = () => {
   };
 
   const getCurrentUser = () => {
-    return appwrite.account.get();
+    try {
+      return appwrite.account.get();
+    } catch {
+      return null;
+    }
   };
 
   const signOutUser = async () => {

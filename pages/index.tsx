@@ -4,13 +4,28 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 import Footer from "../components/common/Footer";
 import Navbar from "../components/common/Navbar";
 import { Card, Feature } from "../components/pricing/Card";
+import { useAuth } from "../hooks/useAuth";
 
 export default function Home() {
   const { t } = useTranslation("common");
+  const { getCurrentUser } = useAuth();
+  const [isLogged, setIsLogged] = useState(false);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const user = await getCurrentUser();
+      if (user) {
+        setIsLogged(true);
+      }
+    };
+    fetchUser();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>
@@ -40,12 +55,21 @@ export default function Home() {
             >
               {t("index.hero.button")}
             </a>
-            <Link
-              href="/dashboard"
-              className="mt-6 px-5 py-3 bg-[#2D033B] text-gray-100 border-[1px] border-gray-400/25 font-semibold rounded-md hover:bg-[#461557] hover:text-gray-50 transition duration-300 shadow-lg"
-            >
-              {t("index.hero.dashboard_button")}
-            </Link>
+            {isLogged ? (
+              <Link
+                href="/dashboard"
+                className="mt-6 px-5 py-3 bg-[#2D033B] text-gray-100 border-[1px] border-gray-400/25 font-semibold rounded-md hover:bg-[#461557] hover:text-gray-50 transition duration-300 shadow-lg"
+              >
+                {t("index.hero.dashboard_button")}
+              </Link>
+            ) : (
+              <Link
+                href="/signin"
+                className="mt-6 px-5 py-3 bg-[#2D033B] text-gray-100 border-[1px] border-gray-400/25 font-semibold rounded-md hover:bg-[#461557] hover:text-gray-50 transition duration-300 shadow-lg"
+              >
+                {t("index.hero.signin_button")}
+              </Link>
+            )}
           </div>
         </section>
         <section

@@ -4,7 +4,8 @@
       "subtitle": "Your key to organization in ",
       "business": "Business",
       "button": "Get Started",
-      "dashboard_button": "Go to Dashboard"
+      "dashboard_button": "Go to Dashboard",
+      "signin_button": "Sign in"
     },
     "about": {
       "title": "About",
@@ -76,7 +77,8 @@
     "pricing": "Pricing",
     "features": "Features",
     "team": "Team",
-    "home": "Home"
+    "home": "Home",
+    "login": "Sign in"
   },
   "register": {
     "email": "Email",
