@@ -8,8 +8,9 @@ export default function handler(
   res: NextApiResponse
 ) {
     appwriteSdk.users.list(req.body.email).then((response) => {
-        res.status(200).json({ name: "John Doe" });
+        res.status(200).json(response.users[0]);
     }).catch((error) => {
         console.log(error);
+        res.status(error.code).json({error: error.message});
     });
 }
