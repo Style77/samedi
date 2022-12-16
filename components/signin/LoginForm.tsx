@@ -40,14 +40,17 @@ const LoginForm = ({children}: LoginFormProps) => {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        
+
         setLoading(true);
         setError("");
         try {
-            await logIn(email, password);
+            console.log("??");
+            const res = await logIn(email, password);
+            console.log(res)
             setLoading(false);
             router.push("/dashboard");
         } catch (error: any) {  
+          console.error(error)
             setError(error.message);
             setLoading(false);
         }

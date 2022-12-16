@@ -1,4 +1,4 @@
-import { Client as Appwrite, Account, Databases, Teams } from "appwrite";
+import { Client as Appwrite, Account, Databases, Teams, Avatars } from "appwrite";
 import { atom } from "recoil";
 import { User } from "../types/user";
 
@@ -23,5 +23,6 @@ export const client = new Appwrite()
 const account = new Account(client);
 const database = new Databases(client);
 const teams = new Teams(client);
+const avatars = new Avatars(client);
 
-export const appwrite = { account, database, teams };
+export const appwrite = { account, database, teams, avatars };
