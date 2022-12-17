@@ -1,48 +1,44 @@
 import { appwrite } from "../../../../store/appwrite";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { useAuth } from "../../../../hooks/useAuth";
 import { Models } from "appwrite";
+import { useRouter } from "next/router";
 
-type Props = {
-  teamId: string;
-};
+const Navbar = () => {
+  const router = useRouter();
+  const { id } = router.query;
 
-const Navbar = ({ teamId }: Props) => {
   const [avatarUrl, setAvatarUrl] = useState<string>("");
   const [teamName, setTeamName] = useState<string>("");
 
-    const [user, setUser] = useState<Models.Account<Models.Preferences> | null>(null);
-
-  const { getCurrentUser } = useAuth();
+  const [user, setUser] = useState<Models.Account<Models.Preferences> | null>(null);
 
   useEffect(() => {
     const fetchTeam = async () => {
-      const team = await appwrite.teams.get(teamId);
+      const team = await appwrite.teams.get(id as string);
       setTeamName(team.name);
     };
     const fetchAvatar = async () => {
-        const user = await getCurrentUser();
+        const user = await appwrite.account.get();
         const avatarUrl = appwrite.avatars.getInitials(user?.name || "Unnamed", 48, 48);
-        console.log(avatarUrl);
         setAvatarUrl(avatarUrl.href);
     }
     const fetchUser = async () => {
-        const user = await getCurrentUser();
+        const user = await appwrite.account.get();
         setUser(user);
     }
 
     fetchUser();
     fetchTeam();
     fetchAvatar();
-  }, []);
+  }, [id]);
 
   return (
     <nav className="w-screen p-4 border-b-2 border-black">
       <div className="flex justify-between items-center">
         <div className="flex items-center">
           <div className="w-8 h-8 bg-black rounded-full"></div>
-          <h1 className="text-2xl font-bold ml-2">Samedi</h1>
+          <h1 className="text-2xl font-bold ml-2">{teamName}</h1>
         </div>
         <div className="flex flex-row items-center gap-2">
           <div className="flex flex-col">

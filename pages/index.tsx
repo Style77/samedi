@@ -5,22 +5,25 @@ import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 import Footer from "../components/common/Footer";
 import Navbar from "../components/common/Navbar";
 import { Card, Feature } from "../components/pricing/Card";
-import { useAuth } from "../hooks/useAuth";
+import { appwrite } from "../store/appwrite";
+import { selectAuthState, setAuthState } from "../store/auth/authSlice";
 
 export default function Home() {
   const { t } = useTranslation("common");
-  const { getCurrentUser } = useAuth();
-  const [isLogged, setIsLogged] = useState(false);
+  
+  const authState = useSelector(selectAuthState);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchUser = async () => {
-      const user = await getCurrentUser();
+      const user = await appwrite.account.get();
       if (user) {
-        setIsLogged(true);
+        dispatch(setAuthState(true));
       }
     };
     fetchUser();
@@ -55,7 +58,7 @@ export default function Home() {
             >
               {t("index.hero.button")}
             </a>
-            {isLogged ? (
+            {authState ? (
               <Link
                 href="/dashboard"
                 className="mt-6 px-5 py-3 bg-[#2D033B] text-gray-100 border-[1px] border-gray-400/25 font-semibold rounded-md hover:bg-[#461557] hover:text-gray-50 transition duration-300 shadow-lg"

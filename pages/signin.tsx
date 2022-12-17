@@ -6,13 +6,10 @@ import { useState } from "react";
 import Navbar from "../components/common/Navbar";
 import LoginForm from "../components/signin/LoginForm";
 import RegisterForm from "../components/signin/RegisterForm";
-import { useAuth } from "../hooks/useAuth";
 
 export default function Home() {
   const { t } = useTranslation("common");
   const [showRegister, setShowRegister] = useState(false);
-
-  const { createAccount, logIn, getCurrentUser } = useAuth();
 
   return (
     <>

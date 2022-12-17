@@ -1,8 +1,9 @@
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { useAuth } from "../../hooks/useAuth";
+import { useDispatch, useSelector } from "react-redux";
 import { appwrite } from "../../store/appwrite";
+import { selectAuthState, setAuthState } from "../../store/auth/authSlice";
 import Popup from "../common/Popup";
 
 type LoginFormProps = {
@@ -21,16 +22,14 @@ const LoginForm = ({children}: LoginFormProps) => {
     const { t } = useTranslation("common");
     const router = useRouter();
 
-    const [isLogged, setIsLogged] = useState(false);
-
-    const { logIn, getCurrentUser, signOutUser } = useAuth();
+    const authState = useSelector(selectAuthState);
+    const dispatch = useDispatch();
 
     useEffect(() => {
         const checkUser = async () => {
-            const user = await getCurrentUser();
-            console.log(user)
+            const user = await appwrite.account.get();
             if (user) {
-                setIsLogged(true);
+                dispatch(setAuthState(true));
             }
         };
         checkUser();
@@ -44,26 +43,23 @@ const LoginForm = ({children}: LoginFormProps) => {
         setLoading(true);
         setError("");
         try {
-            console.log("??");
-            const res = await logIn(email, password);
-            console.log(res)
+            await appwrite.account.createEmailSession(email, password);
             setLoading(false);
             router.push("/dashboard");
-        } catch (error: any) {  
-          console.error(error)
+        } catch (error: any) {
             setError(error.message);
             setLoading(false);
         }
     };
     
     const handleApprove = async () => {
-        await signOutUser();
-        setIsLogged(false);
+        await appwrite.account.deleteSession("current");
+        dispatch(setAuthState(true));
     }
 
   return (
     <div className="xl:ml-20 xl:w-5/12 lg:w-5/12 md:w-8/12 mb-12 md:mb-0">
-      {isLogged && (
+      {authState && (
         <Popup
           popupText={t("popups.alreadyLoggedIn.text")}
           popupApproveText={t("popups.alreadyLoggedIn.approve")}

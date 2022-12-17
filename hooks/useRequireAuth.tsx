@@ -1,9 +1,8 @@
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import { useAuth } from "./useAuth";
+import { appwrite } from "../store/appwrite";
 
-export const useRequireAuth = (redirect_url: string="/signin") => {
-    const { getCurrentUser } = useAuth();
+export const useRequireAuth = (redirect_url: string="/signin?alert=\"Login to access to this page!\"") => {
     const router = useRouter();
     
     useEffect(() => {  // todo
@@ -11,7 +10,7 @@ export const useRequireAuth = (redirect_url: string="/signin") => {
             let user;
 
             try {
-                user = await getCurrentUser();
+                user = await appwrite.account.get();
             } catch (error: any) {
                 user = null;
             }

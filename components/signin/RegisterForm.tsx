@@ -5,7 +5,6 @@ import { FiEye, FiEyeOff } from "react-icons/fi";
 import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
 import Link from "next/link";
-import { useAuth } from "../../hooks/useAuth";
 
 type RegisterFormProps = {
   children?: React.ReactNode;
@@ -23,8 +22,6 @@ const RegisterForm = ({ children }: RegisterFormProps) => {
   const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
 
   const { t } = useTranslation("common");
-
-  // const { createAccount } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

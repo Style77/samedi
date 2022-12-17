@@ -1,2 +1,0 @@
-# Samedi widgets
-Here are the widgets that are available for the Samedi dashboard. These are default widgets that are available for all teams. ~~If you want to create your own widgets, please see the [widget documentation](../README.md).~~ Coming soon.
