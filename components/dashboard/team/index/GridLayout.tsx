@@ -200,9 +200,4 @@ const GridLayout = () => {
   );
 };
 
-GridLayout.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.string).isRequired,
-  layouts: PropTypes.object.isRequired,
-};
-
 export default GridLayout;

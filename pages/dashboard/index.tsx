@@ -12,6 +12,10 @@ import NotificationsCard from "../../components/dashboard/index/NotificationsCar
 import TeamsCard from "../../components/dashboard/index/TeamsCard";
 import Navbar from "../../components/dashboard/team/index/Navbar";
 
+
+import { Grid } from "@mui/material";
+import PatchNotesCard from "../../components/dashboard/index/PatchNotesCard";
+
 export default function Dashboard() {
   useRequireAuth();
 
@@ -23,12 +27,14 @@ export default function Dashboard() {
       <Head>
         <title>Samedi - dashboard</title>
       </Head>
-      <main className="min-h-screen bg-gray-200">
-        <section className="grid grid-cols-3 gap-2 p-4">
-          <NewTeamCard />
-          <TeamsCard />
-          {/* <PatchNotesCard /> */}
-          <NotificationsCard />
+      <main className="min-h-screen bg-zinc-900">
+        <section className="p-12">
+          <Grid container spacing={3}>
+            <NewTeamCard />
+            <TeamsCard />
+            <PatchNotesCard />
+            <NotificationsCard />
+          </Grid>
         </section>
       </main>
     </>

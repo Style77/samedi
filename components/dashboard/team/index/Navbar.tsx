@@ -1,7 +1,7 @@
 import { appwrite } from "../../../../store/appwrite";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { Models } from "appwrite";
+import { Models, Query } from "appwrite";
 import { useRouter } from "next/router";
 
 const Navbar = () => {
@@ -12,6 +12,7 @@ const Navbar = () => {
   const [teamName, setTeamName] = useState<string>("");
 
   const [user, setUser] = useState<Models.Account<Models.Preferences> | null>(null);
+  const [roles, setRoles] = useState<string[]>([]);
 
   useEffect(() => {
     const fetchTeam = async () => {
@@ -27,10 +28,18 @@ const Navbar = () => {
         const user = await appwrite.account.get();
         setUser(user);
     }
+    const fetchRoles = async () => {
+      const user = await appwrite.account.get();
+      const membership = await appwrite.teams.listMemberships(id as string, [
+        Query.equal("userId", user.$id),
+      ]);
+      setRoles(membership.memberships[0].roles);
+    };
 
     fetchUser();
     fetchTeam();
     fetchAvatar();
+    fetchRoles();
   }, [id]);
 
   return (
@@ -43,15 +52,15 @@ const Navbar = () => {
         <div className="flex flex-row items-center gap-2">
           <div className="flex flex-col">
             <span className="font-semibold">{user?.name || "Unknown"}</span>
-            <span className="text-gray-400">{teamName}</span>
+            <span className="text-gray-400">{roles[0]?.charAt(0).toUpperCase() + roles[0]?.slice(1)}</span>
           </div>
-            <Image
-              src={avatarUrl}
-              alt="Avatar"
-              width={48}
-              height={48}
-              className="rounded-full"
-            />
+          <Image
+            src={avatarUrl}
+            alt="Avatar"
+            width={48}
+            height={48}
+            className="rounded-full"
+          />
         </div>
       </div>
     </nav>

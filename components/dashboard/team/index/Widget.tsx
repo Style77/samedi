@@ -11,24 +11,14 @@ type IWidget = {
 
 
 const loadWidget = (widget: IWidget) => {
-  // Due to StackBlitz limitaion, I was not able to make it work dynamically
-  // But this switch case can be easily replaced with following dynamic code
-  // return React.lazy(() => import(`../widget/${widget.id}.tsx`));
-  // switch (widget.id) {
-  //   case "IncrementWidget":
-  //     return () => import(`./widgets/HelloWidget`);
-  //   case "DecrementWidget":
-  //     return () => import(`../widgets/DecrementWidget.tsx`);
-  //   case "ImageWidget":
-  //     return () => import(`../widgets/ImageWidget.tsx`);
-  //   default:
-  //     return null;
-  // }
 
-  if (AVAILABLE_WIDGETS.includes(widget.id)) {
-    return React.lazy(() => import(`./widgets/${widget.id}`))
+  console.log(widget)
+  const widget_id = widget.id.split("__")[0];
+  console.log(widget_id)
+  if (AVAILABLE_WIDGETS.includes(widget_id)) {
+    return React.lazy(() => import(`./widgets/${widget_id}`));
   } else {
-    return React.lazy(() => import(`./widgets/DefaultWidget`))
+    return React.lazy(() => import(`./widgets/DefaultWidget`));
   }
 
 };

@@ -13,7 +13,7 @@ export const availableWidgets = [
     previewImg: "https://via.placeholder.com/100x40",
     previewName: "Clock widget",
     id: "ClockWidget",
-    layout: { i: "ClockWidget", x: 0, y: 0, w: 2, h: 1 },
+    layout: { i: "ClockWidget", x: 0, y: 0, w: 2, h: 0.5 },
   },
   {
     previewImg: "https://via.placeholder.com/100x40",
@@ -41,7 +41,11 @@ export const WidgetSelector = () => {
               // which we can do by adding this attribute
               // @see https://bugzilla.mozilla.org/show_bug.cgi?id=568313
               e.dataTransfer.setData("text/plain", "");
-              e.dataTransfer.setData("droppableWidget", JSON.stringify(widget));
+              let widgetCust = { layout: widget.layout, previewImg: widget.previewImg, previewName: widget.previewName, id: widget.id + "__" + Math.floor(Math.random()*100000)}
+              e.dataTransfer.setData(
+                "droppableWidget",
+                JSON.stringify(widgetCust)
+              );
               return true;
             }}
           >
