@@ -10,11 +10,11 @@ import { ID } from "appwrite";
 import NewTeamCard from "../../components/dashboard/index/NewTeamCard";
 import NotificationsCard from "../../components/dashboard/index/NotificationsCard";
 import TeamsCard from "../../components/dashboard/index/TeamsCard";
-import Navbar from "../../components/dashboard/team/index/Navbar";
-
 
 import { Grid } from "@mui/material";
 import PatchNotesCard from "../../components/dashboard/index/PatchNotesCard";
+import Navbar from "../../components/common/Navbar";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 export default function Dashboard() {
   useRequireAuth();
@@ -27,9 +27,10 @@ export default function Dashboard() {
       <Head>
         <title>Samedi - dashboard</title>
       </Head>
-      <main className="min-h-screen bg-zinc-900">
+      <Navbar />
+      <main className="min-h-screen bg-white">
         <section className="p-12">
-          <Grid container spacing={3}>
+          <Grid container spacing={3} style={{marginTop: "12px"}}>
             <NewTeamCard />
             <TeamsCard />
             <PatchNotesCard />
@@ -39,4 +40,13 @@ export default function Dashboard() {
       </main>
     </>
   );
+}
+
+
+export async function getStaticProps({ locale }: any) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale ?? "en", ["common"])),
+    },
+  };
 }

@@ -41,8 +41,8 @@ export default function Dashboard() {
           <title>Samedi - dashboard</title>
         </Head>
         <Navbar />
-        <main>
-          <GridLayout/>
+        <main className="bg-[url(https://i.pinimg.com/originals/b5/35/db/b535db122e038eebb53dc7e63bfd65c3.jpg)] bg-cover bg-no-repeat">
+          <GridLayout />
         </main>
       </>
     );

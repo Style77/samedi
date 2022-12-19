@@ -6,3 +6,10 @@
     position: relative;
     width: 100%;
 }
+
+.grid {
+    background-size: 158.5px 185px;
+    background-position: 7px 7px;
+    background-image: linear-gradient(to right, rgb(128, 128, 128, 0.5) 1px, transparent 1px),
+        linear-gradient(to bottom, rgb(128, 128, 128, 0.5) 1px, transparent 1px);
+}

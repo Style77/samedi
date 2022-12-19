@@ -21,6 +21,12 @@ export const availableWidgets = [
     id: "NotesWidget",
     layout: { i: "NotesWidget", x: 0, y: 0, w: 2, h: 3 },
   },
+  {
+    previewImg: "https://via.placeholder.com/100x40",
+    previewName: "Boards widget",
+    id: "BoardsWidget",
+    layout: { i: "BoardsWidget", x: 0, y: 0, w: 3, h: 2 },
+  },
 ];
 
 export const WidgetSelector = () => {

@@ -4,11 +4,15 @@ import { Layout, Responsive, WidthProvider } from "react-grid-layout";
 
 import { appwrite } from "../../../../store/appwrite";
 import { Query } from "appwrite";
+
 import { IoMdAdd, IoMdCheckmark, IoMdRemove } from "react-icons/io";
 import { AiOutlineClose, AiOutlineEdit } from "react-icons/ai";
+import WallpaperIcon from "@mui/icons-material/Wallpaper";
+
 import DefaultWidget from "./Widget";
 import { useRouter } from "next/router";
 import { WidgetSelector } from "./widgets/WidgetSelector";
+import Fab from "@mui/material/Fab";
 
 const ResponsiveGridLayout = WidthProvider(Responsive);
 
@@ -37,6 +41,8 @@ const GridLayout = () => {
   const [layoutDocId, setLayoutDocId] = useState("");
 
   const [showSelector, setShowSelector] = useState(false);
+
+  const [showBackgroundSelectorModal, setShowBackgroundSelectorModal] = useState(false);
 
   useEffect(() => {
     const fetchLayout = async () => {
@@ -76,13 +82,21 @@ const GridLayout = () => {
     );
   };
 
-  const handleEdit = () => {
+  const handleEdit = async () => {
     if (isEditable) {
-      handleSave().then((res) => {
-        setIsEditable(!isEditable);
-      });
+      await handleSave()
+      setIsEditable(false);
+
+      // turn off grid
+      const elem = document.querySelector(".react-grid-layout");
+      elem!.classList.remove("grid");
+
     } else {
-      setIsEditable(!isEditable);
+      setIsEditable(true);
+
+      // turn on grid
+      const elem = document.querySelector(".react-grid-layout");
+      elem!.classList.add("grid");
     }
   };
 
@@ -142,6 +156,8 @@ const GridLayout = () => {
   return (
     <>
       <ResponsiveGridLayout
+        className="backdrop-blur-sm"
+        style={{ height: "calc(100vh - 82px)" }}
         isDroppable
         useCSSTransforms
         preventCollision
@@ -154,11 +170,7 @@ const GridLayout = () => {
         cols={{ lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 }}
       >
         {tiles.map((tile) => (
-          <DefaultWidget
-            key={tile.id}
-            widget={tile}
-            data-grid={tile.layout}
-          >
+          <DefaultWidget key={tile.id} widget={tile} data-grid={tile.layout}>
             {isEditable ? (
               <div className="absolute top-0 right-0">
                 <button
@@ -174,27 +186,49 @@ const GridLayout = () => {
       </ResponsiveGridLayout>
 
       {roles?.includes("owner") ? (
-        <button
+        <Fab
           onClick={handleEdit}
-          className="bg-black text-white p-2 rounded-md text-2xl fixed bottom-4 right-4"
+          style={{
+            zIndex: 1000,
+            bottom: "2rem",
+            right: "2rem",
+            position: "absolute",
+          }}
         >
           {isEditable ? <IoMdCheckmark /> : <AiOutlineEdit />}
-        </button>
+        </Fab>
       ) : null}
       {isEditable ? (
-        <div className="fixed bottom-4 right-16">
+        <>
           {showSelector ? (
             <div className="bg-black text-white p-2 rounded-md text-2xl my-2">
               <WidgetSelector />
             </div>
           ) : null}
-          <button
-            className="bg-black text-white p-2 rounded-md text-2xl"
+          <Fab
+            style={{
+              zIndex: 1000,
+              bottom: "2rem",
+              right: "6rem",
+              position: "absolute",
+            }}
             onClick={() => setShowSelector(!showSelector)}
           >
             {showSelector ? <IoMdRemove /> : <IoMdAdd />}
-          </button>
-        </div>
+          </Fab>
+
+          <Fab
+            style={{
+              zIndex: 1000,
+              bottom: "2rem",
+              right: "10rem",
+              position: "absolute",
+            }}
+            onClick={() => setShowBackgroundSelectorModal(true)}
+          >
+            <WallpaperIcon />
+          </Fab>
+        </>
       ) : null}
     </>
   );

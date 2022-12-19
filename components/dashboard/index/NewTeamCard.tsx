@@ -96,14 +96,46 @@ const NewTeamCard = () => {
                 ref={teamNameRef}
                 required
               />
-              <Button
-                type="submit"
-                variant="contained"
-                color="secondary"
-                endIcon={<AddIcon />}
-              >
-                Add
-              </Button>
+              {teamStatus && (
+                <>
+                  <Typography variant="body2" color="error">
+                    {teamStatus}
+                  </Typography>
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    color="success"
+                    endIcon={<AddIcon />}
+                  >
+                    Add
+                  </Button>
+                </>
+              )}
+              {teamError && (
+                <>
+                  <Typography variant="body2" color="error">
+                    {teamError}
+                  </Typography>
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    color="error"
+                    endIcon={<AddIcon />}
+                  >
+                    Add
+                  </Button>
+                </>
+              )}
+              {!teamStatus && !teamError && (
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="secondary"
+                  endIcon={<AddIcon />}
+                >
+                  Add
+                </Button>
+              )}
             </div>
           </form>
         </CardContent>

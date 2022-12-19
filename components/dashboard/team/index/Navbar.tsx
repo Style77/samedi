@@ -43,7 +43,7 @@ const Navbar = () => {
   }, [id]);
 
   return (
-    <nav className="w-screen p-4 border-b-2 border-black">
+    <nav className="relative p-4 border-b-2 border-black">
       <div className="flex justify-between items-center">
         <div className="flex items-center">
           <div className="w-8 h-8 bg-black rounded-full"></div>
