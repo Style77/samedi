@@ -157,7 +157,7 @@ const GridLayout = () => {
     <>
       <ResponsiveGridLayout
         className="backdrop-blur-sm"
-        style={{ height: "calc(100vh - 82px)" }}
+        style={{ height: "calc(100vh - 64px)" }}
         isDroppable
         useCSSTransforms
         preventCollision

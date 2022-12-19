@@ -30,8 +30,7 @@ const BoardsWidget = () => {
         process.env.APPWRITE_BOARDS_COLLECTION_ID!,
         [Query.equal("teamId", id as string)]
       );
-      console.log(boards)
-      setBoards(boards.documents);
+      setBoards(boards.documents.map((board) => board as unknown as Board));
     };
     fetchBoards();
   }, [id]);
