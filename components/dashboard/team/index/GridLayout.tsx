@@ -29,7 +29,11 @@ type ITile = {
   layout: Tile;
 };
 
-const GridLayout = () => {
+type Props = {
+  setShowBackgroundSelectorModal: (show: boolean) => void;
+}
+
+const GridLayout = (props: Props) => {
   const router = useRouter();
   const { id } = router.query;
 
@@ -41,8 +45,6 @@ const GridLayout = () => {
   const [layoutDocId, setLayoutDocId] = useState("");
 
   const [showSelector, setShowSelector] = useState(false);
-
-  const [showBackgroundSelectorModal, setShowBackgroundSelectorModal] = useState(false);
 
   useEffect(() => {
     const fetchLayout = async () => {
@@ -224,7 +226,7 @@ const GridLayout = () => {
               right: "10rem",
               position: "absolute",
             }}
-            onClick={() => setShowBackgroundSelectorModal(true)}
+            onClick={() => props.setShowBackgroundSelectorModal(true)}
           >
             <WallpaperIcon />
           </Fab>
