@@ -1,8 +1,8 @@
 import { TextField, Typography, TypographyTypeMap } from "@mui/material";
 import { OverridableComponent } from "@mui/material/OverridableComponent";
-import { useState } from "react";
+import { use, useEffect, useState } from "react";
 
-type Props = OverridableComponent<TypographyTypeMap<{}, "span">> & {
+type Props = {
   defaultText: string;
   variant:
     | "h1"
@@ -19,9 +19,11 @@ type Props = OverridableComponent<TypographyTypeMap<{}, "span">> & {
     | "caption"
     | "overline";
   onSave: (text: string) => void;
+
+  style?: React.CSSProperties;
 };
 
-const EditableLabel = ({ defaultText, variant, onSave, ...rest }: Props) => {
+const EditableLabel = ({ defaultText, variant, onSave, style, ...rest }: Props) => {
     
   const [text, setText] = useState(defaultText);
 
@@ -31,15 +33,37 @@ const EditableLabel = ({ defaultText, variant, onSave, ...rest }: Props) => {
     if (e.key === "Enter") {
       setIsEditing(false);
       onSave(text);
+    } else if (e.key === "Escape") {
+      setIsEditing(false);
+      setText(defaultText);
     }
   };
+
+  // some weird bug
+  useEffect(() => {
+    setText(defaultText);
+  }, [defaultText]);
 
   return (
     <>
       {isEditing ? (
-        <TextField id="outlined-basic" label="Outlined" variant="outlined" value={text} onChange={(e) => setText(e.currentTarget.value)} />
+        <TextField
+          id="outlined-basic"
+          variant="outlined"
+          style={style}
+          value={text}
+          onChange={(e) => setText(e.currentTarget.value)}
+          onKeyDown={handleKeyDown}
+        />
       ) : (
-        <Typography variant={variant} {...rest}>{text}</Typography>
+        <Typography
+          variant={variant}
+          {...rest}
+          style={style}
+          onClick={() => setIsEditing(true)}
+        >
+          {text}
+        </Typography>
       )}
     </>
   );

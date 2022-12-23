@@ -3,6 +3,7 @@ import {
   Box,
   Button,
   Container,
+  Divider,
   Fab,
   IconButton,
   List,
@@ -14,7 +15,12 @@ import {
 
 import { ID, Query } from "appwrite";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { DragDropContext, Draggable, Droppable, DropResult } from "react-beautiful-dnd";
+import {
+  DragDropContext,
+  Draggable,
+  Droppable,
+  DropResult,
+} from "react-beautiful-dnd";
 import { appwrite } from "../../../store/appwrite";
 import BoardCard from "./Card";
 
@@ -52,13 +58,22 @@ const Board = ({ boardId }: Props) => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
 
   useEffect(() => {
+    const fetchBoardName = async () => {
+      const board = await appwrite.database.getDocument(
+        process.env.APPWRITE_TEAMS_DATABASE_ID!,
+        process.env.APPWRITE_BOARDS_COLLECTION_ID!,
+        boardId!
+      );
+      console.log(board);
+      setBoardName(board.name);
+    };
+
     const fetchBoard = async () => {
       const boards = await appwrite.database.listDocuments(
         process.env.APPWRITE_BOARDS_DATABASE_ID!,
         process.env.APPWRITE_COLUMNS_COLLECTION_ID!,
         [Query.equal("boardId", boardId)]
       );
-      setBoardName(boards.documents[0].label);
       const columns = await Promise.all(
         boards.documents.map(async (column) => {
           return {
@@ -78,6 +93,7 @@ const Board = ({ boardId }: Props) => {
       console.log(columns);
       setColumns(columns as unknown as Column[]);
     };
+    fetchBoardName();
     fetchBoard();
   }, [boardId]);
 
@@ -106,6 +122,15 @@ const Board = ({ boardId }: Props) => {
           items: destItems,
         },
       });
+
+      appwrite.database.updateDocument(
+        process.env.APPWRITE_BOARDS_DATABASE_ID!,
+        process.env.APPWRITE_CARDS_COLLECTION_ID!,
+        removed.$id,
+        {
+          columnId: destColumn.$id,
+        }
+      );
     } else {
       const column = columns[source.droppableId as unknown as number];
       const copiedItems = [...column.items];
@@ -118,6 +143,15 @@ const Board = ({ boardId }: Props) => {
           items: copiedItems,
         },
       });
+
+      appwrite.database.updateDocument(
+        process.env.APPWRITE_BOARDS_DATABASE_ID!,
+        process.env.APPWRITE_CARDS_COLLECTION_ID!,
+        removed.$id,
+        {
+          index: destination.index,
+        }
+      );
     }
   };
 
@@ -213,7 +247,7 @@ const Board = ({ boardId }: Props) => {
     setColumns([...newColumns]);
   };
 
-  const updateColumn = async (columnId: string, label: string) => {
+  const updateColumnLabel = async (columnId: string, label: string) => {
     await appwrite.database.updateDocument(
       process.env.APPWRITE_BOARDS_DATABASE_ID!,
       process.env.APPWRITE_COLUMNS_COLLECTION_ID!,
@@ -231,26 +265,35 @@ const Board = ({ boardId }: Props) => {
     setColumns([...newColumns]);
   };
 
+  const updateBoardName = async (name: string) => {
+    await appwrite.database.updateDocument(
+      process.env.APPWRITE_TEAMS_DATABASE_ID!,
+      process.env.APPWRITE_BOARDS_COLLECTION_ID!,
+      boardId,
+      {
+        name: name,
+      }
+    );
+    setBoardName(name);
+  };
+
   return (
     <DragDropContext
       onDragEnd={(result) => onDragEnd(result, columns, setColumns)}
     >
       <EditableLabel
         variant="h4"
-
-        align="left"
         style={{ padding: "20px" }}
         onSave={(newName) => {
           updateBoardName(newName);
         }}
-        
         defaultText={boardName}
       ></EditableLabel>
       <Stack
         direction="row"
         style={{ gap: "20px", width: "100vw", paddingInline: "20px" }}
       >
-        {Object.entries(columns).map(([columnId, column], index) => {
+        {Object.entries(columns).map(([columnId, column]: any, index) => {
           return (
             <Droppable key={columnId} droppableId={columnId}>
               {(provided) => (
@@ -259,48 +302,62 @@ const Board = ({ boardId }: Props) => {
                   {...provided.droppableProps}
                   className="h-[80vh] p-3 border-2 border-zinc-600 rounded-md shadow-md"
                 >
-                  <Stack direction="row" style={{ gap: "20px" }}>
-                    <Typography variant="subtitle1" align="center">
-                      {column.label}
-                    </Typography>
-                    {isEditing && (
-                      <Fab
+                  <Stack
+                    direction="row"
+                    style={{ gap: "20px", width: "100%", display: "flex" }}
+                  >
+                    <EditableLabel
+                      style={{ width: "100%" }}
+                      variant="subtitle1"
+                      defaultText={column.label}
+                      onSave={(text) => updateColumnLabel(column.$id, text)}
+                    />
+                    <div className="justify-end flex">
+                      <DeleteIcon
+                        sx={{ fontSize: 22 }}
+                        className="text-zinc-900 hover:text-zinc-600 cursor-pointer transition duration-300"
                         onClick={() => deleteColumn(column.$id)}
-                        size="small"
-                      >
-                        <DeleteIcon />
-                      </Fab>
-                    )}
+                      />
+                    </div>
                   </Stack>
-                  {column.items?.map((item, index) => (
+                  <Divider />
+                  {column.items?.map((item: any, index: any) => (
                     <Draggable
                       key={item.$id}
                       draggableId={item.$id}
                       index={index}
                     >
                       {(provided) => (
-                        <ListItem
+                        <div
                           key={index}
-                          secondaryAction={
-                            <IconButton
-                              edge="end"
-                              aria-label="delete"
-                              onClick={() => deleteCard(column.$id, item.$id)}
-                            >
-                              <DeleteIcon />
-                            </IconButton>
-                          }
+                          className="bg-zinc-100 border-2 border-zinc-400/50 rounded-md mt-2"
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
                         >
-                          <div
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
+                          <ListItem
+                            key={index}
+                            secondaryAction={
+                              <IconButton
+                                edge="end"
+                                aria-label="delete"
+                                onClick={() => deleteCard(column.$id, item.$id)}
+                              >
+                                <DeleteIcon />
+                              </IconButton>
+                            }
                           >
-                            <Typography variant="h5" component="h2">
-                              {item.message}
-                            </Typography>
-                          </div>
-                        </ListItem>
+                            <div>
+                              <EditableLabel
+                                variant="subtitle1"
+                                defaultText={item.message}
+                                onSave={(text) =>
+                                  updateCard(column.$id, item.$id, text)
+                                }
+                              />
+                            </div>
+                          </ListItem>
+                        </div>
                       )}
                     </Draggable>
                   ))}
