@@ -11,6 +11,12 @@ export const availableWidgets = [
   },
   {
     previewImg: "https://via.placeholder.com/100x40",
+    previewName: "Conferences widget",
+    id: "ConferencesWidget",
+    layout: { i: "ConferencesWidget", x: 0, y: 0, w: 3, h: 1 },
+  },
+  {
+    previewImg: "https://via.placeholder.com/100x40",
     previewName: "Clock widget",
     id: "ClockWidget",
     layout: { i: "ClockWidget", x: 0, y: 0, w: 2, h: 0.5 },
