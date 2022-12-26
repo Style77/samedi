@@ -64,7 +64,7 @@ const NotesWidget = () => {
         >
           <TextField
             id="newNote"
-            label="Outlined"
+            placeholder="Write note"
             variant="outlined"
             value={newNote}
             onChange={(e) => setNewNote(e.target.value)}

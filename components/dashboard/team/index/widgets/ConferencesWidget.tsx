@@ -1,3 +1,4 @@
+import { useHMSActions } from "@100mslive/react-sdk";
 import {
   CardContent,
   List,
@@ -14,6 +15,7 @@ import { ID, Query } from "appwrite";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { generateManagementToken } from "../../../../../store/100ms/managementToken";
 import { appwrite } from "../../../../../store/appwrite";
 
 const ConferencesWidget = () => {
@@ -40,7 +42,7 @@ const ConferencesWidget = () => {
       let channels = await appwrite.database.listDocuments(
         process.env.APPWRITE_CONFERENCES_DATABASE_ID!,
         process.env.APPWRITE_CHANNELS_COLLECTION_ID!,
-        [Query.equal("teamId", id as string), Query.equal("ended", "")]
+        [Query.equal("teamId", id as string)] // Query.equal("ended", null)
       );
       setConferences(channels.documents);
     };
@@ -50,17 +52,36 @@ const ConferencesWidget = () => {
   }, [id]);
 
   const startNewConference = async () => {
+    let managementToken = await generateManagementToken()
+    console.log(managementToken)
+
+    let response = await fetch("https://api.100ms.live/v2/rooms", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + managementToken,
+      },
+      body: JSON.stringify({
+        name: "NewConference",
+        description: `New conference for team: ${id}`,
+      }),
+    });
+
+    const data = await response.json();
+
+    console.log(data)
+
     let conference = await appwrite.database.createDocument(
       process.env.APPWRITE_CONFERENCES_DATABASE_ID!,
       process.env.APPWRITE_CHANNELS_COLLECTION_ID!,
-      ID.unique(),
+      data.id,
       {
         name: "New conference",
         teamId: id,
       }
     );
 
-    router.push(`/dashboard/team/${id}/conferences/${conference["$id"]}`);
+    router.push(`/dashboard/teams/${id}/conferences/${conference["$id"]}`);
   };
 
   return (
@@ -75,7 +96,7 @@ const ConferencesWidget = () => {
           {conferences &&
             conferences.map((conference) => (
               <Link
-                href={`/dashboard/team/${id}/conferences/${conference.$id}`}
+                href={`/dashboard/teams/${id}/conferences/${conference.$id}`}
                 key={conference.$id}
               >
                 <ListItemButton>
