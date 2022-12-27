@@ -8,8 +8,8 @@ function Peers() {
   const presenters = useHMSStore(selectPeersScreenSharing);
 
   return (
-    <div className="room-section">
-      <div className="conference-section">
+    <div className="">
+      <div className="">
         <div className="grid grid-flow-col gap-2">
 
           {peers.map((peer) => (

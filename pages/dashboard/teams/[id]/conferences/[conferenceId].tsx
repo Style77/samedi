@@ -1,4 +1,14 @@
-import { Button } from "@mui/material";
+import {
+  Button,
+  Fab,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+} from "@mui/material";
 import { Query } from "appwrite";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -18,11 +28,20 @@ var uuid4 = require("uuid4");
 import {
   HMSRoomProvider,
   selectIsConnectedToRoom,
+  selectPeers,
+  selectRemotePeers,
   useHMSActions,
   useHMSStore,
+  usePreviewJoin,
 } from "@100mslive/react-sdk";
 import Peers from "../../../../../components/dashboard/conferences/Peers";
 import Footer from "../../../../../components/dashboard/conferences/Footer";
+
+import VideocamIcon from "@mui/icons-material/Videocam";
+import VideocamOffIcon from "@mui/icons-material/VideocamOff";
+
+import MicIcon from "@mui/icons-material/Mic";
+import MicOffIcon from "@mui/icons-material/MicOff";
 
 export type Conference = {
   $id: string;
@@ -48,6 +67,13 @@ export default function Conference() {
 
   const isConnected = useHMSStore(selectIsConnectedToRoom);
 
+  const [showPreview, setShowPreview] = useState(true);
+
+  const [isAudioMuted, setIsAudioMuted] = useState(true);
+  const [isVideoMuted, setIsVideoMuted] = useState(true);
+
+  const [userPreviewImage, setUserPreviewImage] = useState<string>("");
+
   useEffect(() => {
     const getConference = async () => {
       let conference = await appwrite.database.getDocument(
@@ -69,6 +95,12 @@ export default function Conference() {
       setUserId(user.$id);
     };
 
+    const getUserAvatar = async () => {
+      let user = await appwrite.account.get();
+      const url = appwrite.avatars.getInitials(user.name);
+      setUserPreviewImage(url.href);
+    };
+
     const checkIfOwner = async () => {
       let memberships = await appwrite.teams.listMemberships(id as string, [
         Query.equal("userId", (await appwrite.account.get()).$id),
@@ -85,6 +117,7 @@ export default function Conference() {
       setTeam(team);
     };
 
+    getUserAvatar();
     getCurrentTeam();
     checkIfOwner();
     getConference();
@@ -95,40 +128,45 @@ export default function Conference() {
     window.onunload = () => {
       if (isConnected) {
         hmsActions.leave();
+        setShowPreview(true);
       }
     };
   }, [hmsActions, isConnected]);
 
   useEffect(() => {
     const joinRoom = async () => {
-        
-        let res = await fetch(`${process.env.SAMEDI_TOKEN_ENDPOINT!}api/token`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            room_id: conferenceId,
-            role: "member",
-            user_id: userId,
-          }),
-        });
 
-        let data = await res.json();
-        console.log(data)
+      const role = isOwner ? "owner" : "member";
 
-        hmsActions.join({
-          userName: (await appwrite.account.get()).name,
-          authToken: data.token,
-          settings: {
-            isAudioMuted: true,
-            isVideoMuted: true,
-          }
-        });
+      let res = await fetch(`${process.env.SAMEDI_TOKEN_ENDPOINT!}api/token`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          room_id: conferenceId,
+          role: role,
+          user_id: userId,
+        }),
+      });
+
+      let data = await res.json();
+      console.log(data);
+
+      hmsActions.join({
+        userName: (await appwrite.account.get()).name,
+        authToken: data.token,
+        settings: {
+          isAudioMuted: isAudioMuted,
+          isVideoMuted: isVideoMuted,
+        },
+      });
+    };
+
+    if (!showPreview) {
+      joinRoom();
     }
-
-    joinRoom();
-  }, [conferenceId, hmsActions, userId]);
+  }, [conferenceId, hmsActions, userId, showPreview]);
 
   return (
     <>
@@ -136,27 +174,104 @@ export default function Conference() {
         <title>Samedi - dashboard</title>
       </Head>
       <Navbar />
-      <main className="flex flex-col items-center justify-center flex-1 px-20 text-center">
-        <div className="flex flex-row mt-2">
-          <h1 className="text-2xl flex">{conference?.name}</h1>
-          {isOwner && (
-            <div className="flex flex-row gap-2">
-              <EditConferenceModal
-                conference={conference!}
-                setConference={setConference}
-              />
+
+      {showPreview ? (
+        <main className="flex flex-col bg-gray-800 items-center justify-center min-h-[calc(100vh-64px)] flex-1 px-20 text-center">
+          <div className="flex flex-col rounded-md border-2 p-4 my-2 text-white gap-2">
+            <div className="w-full justify-center items-center flex">
+              <h1 className="text-2xl flex">{conference?.name}</h1>
+              {isOwner && (
+                <div className="flex flex-row gap-2">
+                  <EditConferenceModal
+                    conference={conference!}
+                    setConference={setConference}
+                  />
+                </div>
+              )}
             </div>
+            <div className="w-full flex flex-row gap-2">
+              <div className="flex flex-col bg-zinc-900 h-96 w-[36rem] rounded-md border-2 border-zinc-700">
+                <div className="flex justify-center items-center w-full h-full">
+                  <div
+                    className="rounded-full w-32 h-32 flex bg-cover bg-center m-auto"
+                    style={{ backgroundImage: "url(" + userPreviewImage + ")" }}
+                  />
+                </div>
+                <div className="flex w-full items-end justify-center mb-4 gap-4">
+                  <Fab onClick={() => setIsAudioMuted(!isAudioMuted)}>
+                    {isAudioMuted ? (
+                      <MicOffIcon className="text-white" />
+                    ) : (
+                      <MicIcon className="text-white" />
+                    )}
+                  </Fab>
+                  <Fab onClick={() => setIsVideoMuted(!isVideoMuted)}>
+                    {isVideoMuted ? (
+                      <VideocamOffIcon className="text-white" />
+                    ) : (
+                      <VideocamIcon className="text-white" />
+                    )}
+                  </Fab>
+                </div>
+              </div>
+              <div className="flex flex-col gap-2 w-1/2">
+                <div className="flex flex-row gap-2">
+                  <button
+                    className="flex flex-row gap-2 items-center justify-center w-full rounded-md bg-gray-700 p-2 hover:bg-gray-600 transition"
+                    onClick={() => {
+                      setShowPreview(false);
+                    }}
+                  >
+                    <div className="flex">
+                      <h1 className="text-lg">Join</h1>
+                    </div>
+                  </button>
+                </div>
+                {/* <TableContainer component={Paper}>
+                  <Table>
+                    <TableHead>
+                      <TableRow>
+                        <TableCell align="center">Name</TableCell>
+                        <TableCell align="center">Role</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {connectedPeers.map((peer) => (
+                        <TableRow key={peer.id}>
+                          <TableCell align="right">{peer.name}</TableCell>
+                          <TableCell align="right">{peer.roleName}</TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer> */}
+              </div>
+            </div>
+          </div>
+        </main>
+      ) : (
+        <main className="flex flex-col items-center justify-center flex-1 px-20 text-center">
+          <div className="flex flex-row mt-2">
+            <h1 className="text-2xl flex">{conference?.name}</h1>
+            {isOwner && (
+              <div className="flex flex-row gap-2">
+                <EditConferenceModal
+                  conference={conference!}
+                  setConference={setConference}
+                />
+              </div>
+            )}
+          </div>
+          {isConnected ? (
+            <>
+              <Peers />
+              <Footer setShowPreview={setShowPreview} />
+            </>
+          ) : (
+            <h1>Connecting...</h1>
           )}
-        </div>
-        {isConnected ? (
-          <>
-            <Peers />
-            <Footer />
-          </>
-        ) : (
-          <h1>Connecting...</h1>
-        )}
-      </main>
+        </main>
+      )}
     </>
   );
 }

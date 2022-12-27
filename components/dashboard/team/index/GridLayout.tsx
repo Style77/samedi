@@ -91,14 +91,14 @@ const GridLayout = (props: Props) => {
 
       // turn off grid
       const elem = document.querySelector(".react-grid-layout");
-      elem!.classList.remove("grid");
+      elem!.classList.remove("dashboard-grid");
 
     } else {
       setIsEditable(true);
 
       // turn on grid
       const elem = document.querySelector(".react-grid-layout");
-      elem!.classList.add("grid");
+      elem!.classList.add("dashboard-grid");
     }
   };
 
