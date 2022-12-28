@@ -15,6 +15,7 @@ import {
   Tooltip,
   Stack,
   Typography,
+  Skeleton,
 } from "@mui/material";
 import Link from "next/link";
 
@@ -33,6 +34,8 @@ const Navbar = () => {
   const [roles, setRoles] = useState<string[]>([]);
 
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+
+  const [loading, setLoading] = useState<boolean>(true);
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
@@ -68,10 +71,14 @@ const Navbar = () => {
       setRoles(membership.memberships[0].roles);
     };
 
+    setLoading(true);
+
     fetchUser();
     fetchTeam();
     fetchAvatar();
     fetchRoles();
+
+    setLoading(false);
   }, [id]);
 
   const handleMenuItem = (setting: string) => {
@@ -107,7 +114,7 @@ const Navbar = () => {
                 textDecoration: "none",
               }}
             >
-              {teamName}
+              {loading ? <Skeleton width={200} /> : teamName}
             </Typography>
           </Link>
 
@@ -118,20 +125,28 @@ const Navbar = () => {
               <Stack direction="column">
                 <>
                   <Typography variant="body1" noWrap>
-                    {user?.name}
+                    {loading ? <Skeleton width={120} /> : user?.name}
                   </Typography>
                   <Typography variant="body2" noWrap>
-                    {roles[0]?.charAt(0).toUpperCase() + roles[0]?.slice(1)}
+                    {loading || !roles[0] ? (
+                      <Skeleton width={90} />
+                    ) : (
+                      roles[0]?.charAt(0).toUpperCase() + roles[0]?.slice(1)
+                    )}
                   </Typography>
                 </>
               </Stack>
 
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar
-                    alt={user?.name}
-                    src={appwrite.avatars.getInitials(user?.name).href}
-                  />
+                  {loading ? (
+                    <Skeleton variant="circular" width={50} height={50} />
+                  ) : (
+                    <Avatar
+                      alt={user?.name}
+                      src={appwrite.avatars.getInitials(user?.name).href}
+                    />
+                  )}
                 </IconButton>
               </Tooltip>
               <Menu

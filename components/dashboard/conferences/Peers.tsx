@@ -1,4 +1,5 @@
 import { selectPeers, selectPeersScreenSharing, useHMSStore } from "@100mslive/react-sdk";
+import { Box, Grid } from "@mui/material";
 import React from "react";
 import Peer from "./Peer";
 
@@ -8,20 +9,28 @@ function Peers() {
   const presenters = useHMSStore(selectPeersScreenSharing);
 
   return (
-    <div className="">
-      <div className="">
-        <div className="grid grid-flow-col gap-2">
-
+    <Box sx={{ display: "flex", width: "100%" }}>
+      <Box>
+        <Grid container spacing={2}>
           {peers.map((peer) => (
-            <Peer key={peer.id} peer={peer} />
+            <Peer
+              key={peer.id}
+              peer={peer}
+              isOwner={peer.roleName === "owner"}
+            />
           ))}
 
           {presenters.map((peer) => (
-            <Peer key={`${peer.id}-ss`} peer={peer} screenSharing={true} />
+            <Peer
+              key={`${peer.id}-ss`}
+              peer={peer}
+              screenSharing={true}
+              isOwner={peer.roleName === "owner"}
+            />
           ))}
-        </div>
-      </div>
-    </div>
+        </Grid>
+      </Box>
+    </Box>
   );
 }
 export default Peers;

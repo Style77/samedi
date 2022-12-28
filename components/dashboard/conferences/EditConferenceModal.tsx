@@ -1,8 +1,16 @@
-import { Button, Modal, ModalDialog, Stack, TextField, Typography } from "@mui/joy";
+import {
+  Button,
+  Dialog,
+  DialogTitle,
+  Modal,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { useState } from "react";
 import { Conference } from "../../../pages/dashboard/teams/[id]/conferences/[conferenceId]";
 
-import EditIcon from '@mui/icons-material/Edit';
+import EditIcon from "@mui/icons-material/Edit";
 import { appwrite } from "../../../store/appwrite";
 
 type Props = {
@@ -32,53 +40,28 @@ const EditConferenceModal = ({ conference, setConference }: Props) => {
       <Button onClick={() => setOpen(true)}>
         <EditIcon />
       </Button>
-      <Modal open={open} onClose={() => setOpen(false)}>
-        <ModalDialog
-          aria-labelledby="basic-modal-dialog-title"
-          aria-describedby="basic-modal-dialog-description"
-          sx={{
-            maxWidth: 500,
-            borderRadius: "md",
-            p: 3,
-            boxShadow: "lg",
+      <Dialog open={open} onClose={() => setOpen(false)}>
+        <DialogTitle>Edit conference</DialogTitle>
+        <form
+          onSubmit={(event) => {
+            event.preventDefault();
+            setOpen(false);
+            updateConference();
           }}
         >
-          <Typography
-            id="basic-modal-dialog-title"
-            component="h2"
-            level="inherit"
-            fontSize="1.25em"
-            mb="0.25em"
-          >
-            Edit conference
-          </Typography>
-          <Typography
-            id="basic-modal-dialog-description"
-            mt={0.5}
-            mb={2}
-            textColor="text.tertiary"
-          >
-            {conference.name}
-          </Typography>
-          <form
-            onSubmit={(event) => {
-              event.preventDefault();
-              setOpen(false);
-              updateConference();
-            }}
-          >
-            <Stack spacing={2}>
-              <TextField
-                label="Name"
-                autoFocus
-                required
-                onChange={(e) => setConferenceName(e.target.value)}
-              />
-              <Button type="submit">Submit</Button>
-            </Stack>
-          </form>
-        </ModalDialog>
-      </Modal>
+          <Stack spacing={2}>
+            <TextField
+              size="small"
+              autoFocus
+              required
+              onChange={(e) => setConferenceName(e.target.value)}
+              value={conferenceName}
+              sx={{ paddingInline: "16px" }}
+            />
+            <Button type="submit">Save</Button>
+          </Stack>
+        </form>
+      </Dialog>
     </>
   );
 };

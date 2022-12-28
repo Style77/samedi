@@ -1,13 +1,18 @@
 import {
+  Box,
   Button,
+  Container,
   Fab,
+  Grid,
   Paper,
+  Skeleton,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
+  Typography,
 } from "@mui/material";
 import { Query } from "appwrite";
 import Head from "next/head";
@@ -42,6 +47,7 @@ import VideocamOffIcon from "@mui/icons-material/VideocamOff";
 
 import MicIcon from "@mui/icons-material/Mic";
 import MicOffIcon from "@mui/icons-material/MicOff";
+import Chat from "../../../../../components/dashboard/conferences/chat/Chat";
 
 export type Conference = {
   $id: string;
@@ -135,7 +141,6 @@ export default function Conference() {
 
   useEffect(() => {
     const joinRoom = async () => {
-
       const role = isOwner ? "owner" : "member";
 
       let res = await fetch(`${process.env.SAMEDI_TOKEN_ENDPOINT!}api/token`, {
@@ -166,6 +171,7 @@ export default function Conference() {
     if (!showPreview) {
       joinRoom();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [conferenceId, hmsActions, userId, showPreview]);
 
   return (
@@ -176,21 +182,27 @@ export default function Conference() {
       <Navbar />
 
       {showPreview ? (
-        <main className="flex flex-col bg-gray-800 items-center justify-center min-h-[calc(100vh-64px)] flex-1 px-20 text-center">
-          <div className="flex flex-col rounded-md border-2 p-4 my-2 text-white gap-2">
-            <div className="w-full justify-center items-center flex">
-              <h1 className="text-2xl flex">{conference?.name}</h1>
+        <main className="flex flex-col items-center justify-center min-h-[calc(100vh-64px)] flex-1 px-20 text-center">
+          <Box className="flex flex-col rounded-md border-2 p-4 my-2 gap-2">
+            <Box className="w-full justify-center items-center flex">
+              <Typography className="text-2xl flex">
+                {conference ? (
+                  conference.name
+                ) : (
+                  <Skeleton width={200} variant="text" />
+                )}
+              </Typography>
               {isOwner && (
-                <div className="flex flex-row gap-2">
+                <Box sx={{ display: "flex", flexDirection: "row", gap: "2" }}>
                   <EditConferenceModal
                     conference={conference!}
                     setConference={setConference}
                   />
-                </div>
+                </Box>
               )}
-            </div>
+            </Box>
             <div className="w-full flex flex-row gap-2">
-              <div className="flex flex-col bg-zinc-900 h-96 w-[36rem] rounded-md border-2 border-zinc-700">
+              <Paper variant="outlined" sx={{ height: "24rem", width: "36rem", display: "flex", flexDirection: "column" }}>
                 <div className="flex justify-center items-center w-full h-full">
                   <div
                     className="rounded-full w-32 h-32 flex bg-cover bg-center m-auto"
@@ -213,7 +225,7 @@ export default function Conference() {
                     )}
                   </Fab>
                 </div>
-              </div>
+              </Paper>
               <div className="flex flex-col gap-2 w-1/2">
                 <div className="flex flex-row gap-2">
                   <button
@@ -227,48 +239,68 @@ export default function Conference() {
                     </div>
                   </button>
                 </div>
-                {/* <TableContainer component={Paper}>
-                  <Table>
-                    <TableHead>
-                      <TableRow>
-                        <TableCell align="center">Name</TableCell>
-                        <TableCell align="center">Role</TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {connectedPeers.map((peer) => (
-                        <TableRow key={peer.id}>
-                          <TableCell align="right">{peer.name}</TableCell>
-                          <TableCell align="right">{peer.roleName}</TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </TableContainer> */}
               </div>
             </div>
-          </div>
+          </Box>
         </main>
       ) : (
         <main className="flex flex-col items-center justify-center flex-1 px-20 text-center">
-          <div className="flex flex-row mt-2">
-            <h1 className="text-2xl flex">{conference?.name}</h1>
-            {isOwner && (
-              <div className="flex flex-row gap-2">
-                <EditConferenceModal
-                  conference={conference!}
-                  setConference={setConference}
-                />
-              </div>
+          <Box
+            sx={{ display: "flex", flexDirection: "row", marginTop: "0.5rem" }}
+          >
+            {isConnected ? (
+              <>
+                <Typography variant="h5">{conference?.name}</Typography>
+                {isOwner && (
+                  <EditConferenceModal
+                    conference={conference!}
+                    setConference={setConference}
+                  />
+                )}
+              </>
+            ) : (
+              <Skeleton variant="text" width={200} />
             )}
-          </div>
+          </Box>
           {isConnected ? (
             <>
-              <Peers />
+              <Box sx={{ width: "100vw", paddingInline: "20px" }}>
+                <Box sx={{ display: "flex", flexDirection: "row" }}>
+                  <Peers />
+                  <Chat />
+                </Box>
+              </Box>
               <Footer setShowPreview={setShowPreview} />
             </>
           ) : (
-            <h1>Connecting...</h1>
+            <>
+              <Grid container spacing={2}>
+                <Grid item>
+                  <Skeleton variant="rounded" width={256} height={192} />
+                </Grid>
+                <Grid item>
+                  <Skeleton variant="rounded" width={256} height={192} />
+                </Grid>
+                <Grid item>
+                  <Skeleton variant="rounded" width={256} height={192} />
+                </Grid>
+                <Grid item>
+                  <Skeleton variant="rounded" width={256} height={192} />
+                </Grid>
+                <Grid item>
+                  <Skeleton variant="rounded" width={256} height={192} />
+                </Grid>
+                <Grid item>
+                  <Skeleton variant="rounded" width={256} height={192} />
+                </Grid>
+                <Grid item>
+                  <Skeleton variant="rounded" width={256} height={192} />
+                </Grid>
+                <Grid item>
+                  <Skeleton variant="rounded" width={256} height={192} />
+                </Grid>
+              </Grid>
+            </>
           )}
         </main>
       )}

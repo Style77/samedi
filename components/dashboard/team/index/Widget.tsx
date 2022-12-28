@@ -1,3 +1,4 @@
+import { Skeleton } from '@mui/material';
 import React, { forwardRef, Suspense, useState } from 'react';
 import { Layout } from 'react-grid-layout';
 import { availableWidgets } from './widgets/WidgetSelector';
@@ -28,13 +29,17 @@ type Props = {
   children?: React.ReactNode;
 };
 
+const SkeletonWidget = () => {
+  return (<Skeleton variant="rounded" width={220} height={100} sx={{ backgroundColor: "grey.100" }} />);
+};
+
 const Widget = forwardRef((props: Props, ref: React.ForwardedRef<HTMLDivElement>) => {
   const { widget } = props;
   const [ WidgetComponent ] = useState(() => loadWidget(widget));
 
   return (
     <div ref={ref} {...props}>
-      <Suspense fallback={<>Loading</>}>
+      <Suspense fallback={<SkeletonWidget />}>
         <WidgetComponent />
         {props.children}
       </Suspense>

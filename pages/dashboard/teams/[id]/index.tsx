@@ -1,4 +1,4 @@
-import { Button, Modal, ModalClose, ModalDialog, Typography } from "@mui/joy";
+import { Button, Modal, ModalClose, Dialog, Typography } from "@mui/material";
 import { Divider } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import { ID, Query } from "appwrite";
@@ -97,96 +97,82 @@ export default function Dashboard() {
         className="bg-cover bg-no-repeat"
         style={{ backgroundImage: `url(${dashboardBackgroundUrl})` }}
       >
-        <Modal
+        <Dialog
           open={showBackgroundSelectorModal}
           onClose={() => setShowBackgroundSelectorModal(false)}
+          sx={{
+            maxWidth: 500,
+            borderRadius: "md",
+            p: 3,
+            boxShadow: "lg",
+          }}
         >
-          <ModalDialog
-            aria-labelledby="basic-modal-dialog-title"
-            aria-describedby="basic-modal-dialog-description"
-            sx={{
-              maxWidth: 500,
-              borderRadius: "md",
-              p: 3,
-              boxShadow: "lg",
-            }}
-          >
-            <ModalClose />
-            <Typography
-              id="basic-modal-dialog-title"
-              component="h2"
-              level="inherit"
-              fontSize="1.25em"
-              mb="0.25em"
-            >
-              Choose background
-            </Typography>
-            <Typography
-              id="basic-modal-dialog-description"
-              mt={0.5}
-              mb={2}
-              textColor="text.tertiary"
-            >
-              Choose a background for your dashboard from list
-            </Typography>
+          <ModalClose />
+          <Typography variant="h2">
+            Choose background
+          </Typography>
+          <Typography>
+            Choose a background for your dashboard from list
+          </Typography>
 
-            <Grid container spacing={2}>
-              <Grid item xs={4}>
-                <div
-                  className="bg-cover bg-no-repeat"
-                  style={{
-                    backgroundImage: `url(https://images.unsplash.com/photo-1426604966848-d7adac402bff?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80)`,
-                    height: "100px",
-                    width: "100%",
-                    borderRadius: "10px",
-                    cursor: "pointer",
-                  }}
-                  onClick={() => {
-                    setDashboardBackgroundUrl(
-                      "https://images.unsplash.com/photo-1426604966848-d7adac402bff?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
-                    );
-                  }}
-                ></div>
-              </Grid>
-              <Grid item xs={4}>
-                <div
-                  className="bg-cover bg-no-repeat"
-                  style={{
-                    backgroundImage: `url(https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1176&q=80)`,
-                    height: "100px",
-                    width: "100%",
-                    borderRadius: "10px",
-                    cursor: "pointer",
-                  }}
-                  onClick={() => {
-                    setDashboardBackgroundUrl(
-                      "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1176&q=80"
-                    );
-                  }}
-                ></div>
-              </Grid>
-              <Grid item xs={4}>
-                <div
-                  className="bg-cover bg-no-repeat"
-                  style={{
-                    backgroundImage: `url(https://images.unsplash.com/photo-1469474968028-56623f02e42e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1174&q=80)`,
-                    height: "100px",
-                    width: "100%",
-                    borderRadius: "10px",
-                    cursor: "pointer",
-                  }}
-                  onClick={() => {
-                    setDashboardBackgroundUrl(
-                      "https://images.unsplash.com/photo-1469474968028-56623f02e42e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1174&q=80"
-                    );
-                  }}
-                ></div>
-              </Grid>
+          <Grid container spacing={2}>
+            <Grid item xs={4}>
+              <div
+                className="bg-cover bg-no-repeat"
+                style={{
+                  backgroundImage: `url(https://images.unsplash.com/photo-1426604966848-d7adac402bff?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80)`,
+                  height: "100px",
+                  width: "100%",
+                  borderRadius: "10px",
+                  cursor: "pointer",
+                }}
+                onClick={() => {
+                  setDashboardBackgroundUrl(
+                    "https://images.unsplash.com/photo-1426604966848-d7adac402bff?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
+                  );
+                }}
+              ></div>
             </Grid>
-            <Divider style={{ marginTop: 3, marginBottom: 3 }} />
-            <Button type="submit" onClick={saveBackground} variant="outlined">Save</Button>
-          </ModalDialog>
-        </Modal>
+            <Grid item xs={4}>
+              <div
+                className="bg-cover bg-no-repeat"
+                style={{
+                  backgroundImage: `url(https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1176&q=80)`,
+                  height: "100px",
+                  width: "100%",
+                  borderRadius: "10px",
+                  cursor: "pointer",
+                }}
+                onClick={() => {
+                  setDashboardBackgroundUrl(
+                    "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1176&q=80"
+                  );
+                }}
+              ></div>
+            </Grid>
+            <Grid item xs={4}>
+              <div
+                className="bg-cover bg-no-repeat"
+                style={{
+                  backgroundImage: `url(https://images.unsplash.com/photo-1469474968028-56623f02e42e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1174&q=80)`,
+                  height: "100px",
+                  width: "100%",
+                  borderRadius: "10px",
+                  cursor: "pointer",
+                }}
+                onClick={() => {
+                  setDashboardBackgroundUrl(
+                    "https://images.unsplash.com/photo-1469474968028-56623f02e42e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1174&q=80"
+                  );
+                }}
+              ></div>
+            </Grid>
+          </Grid>
+          <Divider style={{ marginTop: 3, marginBottom: 3 }} />
+          <Button type="submit" onClick={saveBackground} variant="outlined">
+            Save
+          </Button>
+        </Dialog>
 
         <GridLayout
           setShowBackgroundSelectorModal={setShowBackgroundSelectorModal}
