@@ -1,4 +1,5 @@
 /* eslint-disable @next/next/no-html-link-for-pages */
+import { AppBar } from "@mui/material";
 import { t } from "i18next";
 import { useTranslation } from "next-i18next";
 import Link from "next/link";
@@ -12,7 +13,7 @@ const Navbar = () => {
   const authState = useSelector(selectAuthState);
 
   return (
-    <nav className="fixed shadow-lg px-4 lg:px-6 py-2.5 w-full bg-white opacity-50 hover:opacity-100 transition duration-500 ease-out lg:block hidden">
+    <AppBar position="static" color="inherit">
       <div className="flex flex-wrap justify-center items-center mx-auto max-w-screen-xl py-2">
         <div
           className="hidden justify-between items-center w-full lg:flex lg:w-auto lg:order-1"
@@ -22,7 +23,7 @@ const Navbar = () => {
             <li>
               <a
                 href="/#"
-                className="block py-2 pr-4 pl-3 text-gray-400 hover:text-gray-900 transition rounded bg-primary-700 lg:bg-transparent lg:text-primary-700 lg:p-0 group-hover:opacity-100"
+                className="block py-2 pr-4 pl-3 text-gray-200 hover:text-gray-100 transition rounded bg-primary-700 lg:bg-transparent lg:text-primary-700 lg:p-0 group-hover:opacity-100"
                 aria-current="page"
               >
                 {t("navbar.home")}
@@ -31,7 +32,7 @@ const Navbar = () => {
             <li>
               <a
                 href="/#about"
-                className="block py-2 pr-4 pl-3 text-gray-400 hover:text-gray-900 transition border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 "
+                className="block py-2 pr-4 pl-3 text-gray-200 hover:text-gray-100 transition border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 "
               >
                 {t("navbar.about")}
               </a>
@@ -47,7 +48,7 @@ const Navbar = () => {
             <li>
               <a
                 href="/#pricing"
-                className="block py-2 pr-4 pl-3 text-gray-400 hover:text-gray-900 transition border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 "
+                className="block py-2 pr-4 pl-3 text-gray-200 hover:text-gray-100 transition border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 "
               >
                 {t("navbar.pricing")}
               </a>
@@ -56,14 +57,14 @@ const Navbar = () => {
               {authState ? (
                 <Link
                   href="/dashboard"
-                  className="block py-2 pr-4 pl-3 text-gray-400 hover:text-gray-900 transition border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0"
+                  className="block py-2 pr-4 pl-3 text-gray-200 hover:text-gray-100 transition border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0"
                 >
                   {t("navbar.dashboard")}
                 </Link>
               ) : (
                 <Link
                   href="/signin"
-                  className="block py-2 pr-4 pl-3 text-gray-400 hover:text-gray-900 transition border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0"
+                  className="block py-2 pr-4 pl-3 text-gray-200 hover:text-gray-100 transition border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0"
                 >
                   {t("navbar.login")}
                 </Link>
@@ -72,7 +73,7 @@ const Navbar = () => {
           </ul>
         </div>
       </div>
-    </nav>
+    </AppBar>
   );
 };
 

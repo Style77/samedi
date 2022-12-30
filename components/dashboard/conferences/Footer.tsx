@@ -45,25 +45,17 @@ function Footer({ setShowPreview }: Props) {
   return (
     <Box className="fixed bottom-0 mb-8 flex flex-row gap-4">
       <Box sx={{ "& > :not(style)": { m: 1 } }}>
-        <Fab onClick={toggleAudio}>
+        <Fab onClick={toggleAudio} className="text-white hover:text-zinc-800 transition">
           {isLocalAudioEnabled ? (
-            <MicIcon className="text-zinc-800" />
+            <MicIcon />
           ) : (
-            <MicOffIcon className="" />
+            <MicOffIcon />
           )}
         </Fab>
-        <Fab onClick={toggleVideo}>
-          {isLocalVideoEnabled ? (
-            <VideocamIcon className="text-zinc-800" />
-          ) : (
-            <VideocamOffIcon />
-          )}
+        <Fab onClick={toggleVideo} className="text-white hover:text-zinc-800">
+          {isLocalVideoEnabled ? <VideocamIcon /> : <VideocamOffIcon />}
         </Fab>
-        <Fab
-          color="error"
-          onClick={leave}
-          aria-label="end"
-        >
+        <Fab color="error" onClick={leave} aria-label="end">
           <CallIcon />
         </Fab>
       </Box>

@@ -1,4 +1,4 @@
-import { Button, Modal, ModalClose, Dialog, Typography } from "@mui/material";
+import { Button, Modal, Dialog, Typography, DialogTitle } from "@mui/material";
 import { Divider } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import { ID, Query } from "appwrite";
@@ -101,21 +101,18 @@ export default function Dashboard() {
           open={showBackgroundSelectorModal}
           onClose={() => setShowBackgroundSelectorModal(false)}
           sx={{
-            maxWidth: 500,
-            borderRadius: "md",
-            p: 3,
-            boxShadow: "lg",
+            "& .MuiDialog-paper": {
+              width: "100%",
+              maxWidth: "500px",
+              borderRadius: "10px",
+            },
           }}
         >
-          <ModalClose />
-          <Typography variant="h2">
+          <DialogTitle>
             Choose background
-          </Typography>
-          <Typography>
-            Choose a background for your dashboard from list
-          </Typography>
+          </DialogTitle>
 
-          <Grid container spacing={2}>
+          <Grid container spacing={2} sx={{ paddingInline: "24px", paddingBottom: "10px" }}>
             <Grid item xs={4}>
               <div
                 className="bg-cover bg-no-repeat"

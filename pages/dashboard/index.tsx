@@ -28,7 +28,7 @@ export default function Dashboard() {
         <title>Samedi - dashboard</title>
       </Head>
       <Navbar />
-      <main className="min-h-screen bg-white">
+      <main className="min-h-screen">
         <section className="p-12">
           <Grid container spacing={3} style={{marginTop: "12px"}}>
             <NewTeamCard />
